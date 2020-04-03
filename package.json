@@ -1,0 +1,35 @@
+{
+  "name": "xiangqi.js",
+  "version": "0.3.1-dev",
+  "description": "A Javascript Chinese chess/cchess/Xiangqi library for xiangqi move generation/validation, piece placement/movement, and check/checkmate/draw detection",
+  "author": "lengyanyu258 <lengyanyu258@outlook.com> (https://github.com/lengyanyu258)",
+  "license": "BSD-2-Clause",
+  "homepage": "https://github.com/lengyanyu258/xiangqi.js",
+  "keywords": [
+    "xiangqi"
+  ],
+  "main": "xiangqi.js",
+  "filename": "xiangqi.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lengyanyu258/xiangqi.js.git"
+  },
+  "npmName": "xiangqi.js",
+  "npmFileMap": [
+    {
+      "basePath": "",
+      "files": [
+        "xiangqi*.js"
+      ]
+    }
+  ],
+  "devDependencies": {
+    "chai": "4.2.0",
+    "mocha": "6.1.4",
+    "uglify-js": "3.6.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "minify": "uglifyjs xiangqi.js -c -m --comments -o xiangqi.min.js"
+  }
+}

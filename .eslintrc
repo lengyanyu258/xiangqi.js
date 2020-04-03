@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "camelcase": "off",
+        "wrap-iife": "error",
+        "indent": ["error", 2],
+        "new-cap": "error",
+        "quotes": ["error", "single"],
+        "no-invalid-regexp": "error",
+        "dot-notation": "error"
+    }
+}
