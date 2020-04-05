@@ -43,7 +43,7 @@ describe('Single Square Move Generation', function() {
     {fen: '2ba1k3/2R1a4/b8/9/9/9/9/9/9/4K4 r - - 0 1',
       square: 'd9', verbose: false, moves: []},  // pinned piece
     // {fen: '8/k7/8/8/8/8/7p/K7 b - - 0 1',
-    //   square: 'h2', verbose: false, moves: ['h1=Q+', 'h1=R+', 'h1=B', 'h1=N']},  // 
+    //   square: 'h2', verbose: false, moves: ['h1=Q+', 'h1=R+', 'h1=B', 'h1=N']},  //
     // {fen: 'r1bq1rk1/1pp2ppp/p1np1n2/2b1p3/2B1P3/2NP1N2/PPPBQPPP/R3K2R r KQ - 0 8',
     //   square: 'e1', verbose: false, moves: ['Kf1', 'Kd1', 'O-O', 'O-O-O']},  // castling
     // {fen: 'r1bq1rk1/1pp2ppp/p1np1n2/2b1p3/2B1P3/2NP1N2/PPPBQPPP/R3K2R r - - 0 8',
@@ -1113,6 +1113,7 @@ describe('Load PGN (ICCS Format)', function() {
 
   var xiangqi = new Xiangqi();
   var tests = [
+    /*
     {
       pgn: [
         '[Game "Chinese Chess"]',
@@ -1191,6 +1192,7 @@ describe('Load PGN (ICCS Format)', function() {
       ],
       expect: true
     },
+    */
     /*
     {
       // pgn without comments behind moves.
