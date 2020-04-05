@@ -24,12 +24,19 @@
     }
   ],
   "devDependencies": {
-    "chai": "4.2.0",
-    "mocha": "6.1.4",
-    "uglify-js": "3.6.0"
+    "chai": "^4.2.0",
+    "commitizen": "^4.0.3",
+    "mocha": "^7.1.1",
+    "terser": "^4.6.10"
   },
   "scripts": {
+    "init": "commitizen init cz-conventional-changelog --save --save-exact",
     "test": "mocha",
-    "minify": "uglifyjs xiangqi.js -c -m --comments -o xiangqi.min.js"
+    "minify": "terser xiangqi.js -c -m --comments -o xiangqi.min.js"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
