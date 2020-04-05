@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, lengyanyu258 (lengyanyu258@outlook.com)
+ * Copyright (c) 2020, lengyanyu258 (lengyanyu258@outlook.com)
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,59 +28,59 @@
 /* minified license below  */
 
 /* @license
- * Copyright (c) 2019, lengyanyu258 (lengyanyu258@outlook.com)
+ * Copyright (c) 2020, lengyanyu258 (lengyanyu258@outlook.com)
  * Released under the BSD license
  * https://github.com/lengyanyu258/xiangqi.js/blob/master/LICENSE
  */
 
 'use strict';
 
-var Xiangqi = function(fen) {
-  var BLACK = 'b';
-  var RED   = 'r';
+const Xiangqi = function(fen) {
+  const BLACK = 'b';
+  const RED   = 'r';
 
-  var EMPTY = -1;
+  const EMPTY = -1;
 
-  var PAWN    = 'p';
-  var CANNON  = 'c';
-  var ROOK    = 'r';
-  var KNIGHT  = 'n';
-  var BISHOP  = 'b';
-  var ADVISER = 'a';
-  var KING    = 'k';
+  const PAWN    = 'p';
+  const CANNON  = 'c';
+  const ROOK    = 'r';
+  const KNIGHT  = 'n';
+  const BISHOP  = 'b';
+  const ADVISER = 'a';
+  const KING    = 'k';
 
-  var SYMBOLS = 'pcrnbakPCRNBAK';
+  const SYMBOLS = 'pcrnbakPCRNBAK';
 
-  var DEFAULT_POSITION = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1';
+  const DEFAULT_POSITION = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1';
 
-  var POSSIBLE_RESULTS = Object.freeze(['1-0', '0-1', '1/2-1/2', '*']);
+  const POSSIBLE_RESULTS = Object.freeze(['1-0', '0-1', '1/2-1/2', '*']);
 
-  var PAWN_OFFSETS = Object.freeze({
+  const PAWN_OFFSETS = Object.freeze({
     b: [ 0x10, -0x01, 0x01],
     r: [-0x10, -0x01, 0x01]
   });
 
-  var PIECE_OFFSETS = Object.freeze({
+  const PIECE_OFFSETS = Object.freeze({
     c: [-0x10, 0x10, -0x01, 0x01],
     r: [-0x10, 0x10, -0x01, 0x01],
-    n: [-0x20 - 0x01, -0x20 + 0x01, 0x20 - 0x01, 0x20 + 0x01,
-      -0x10 - 0x02, 0x10 - 0x02, -0x10 + 0x02, 0x10 + 0x02],
+    n: [-0x20 - 0x01, -0x20 + 0x01,  0x20 - 0x01, 0x20 + 0x01,
+        -0x10 - 0x02,  0x10 - 0x02, -0x10 + 0x02, 0x10 + 0x02],
     b: [-0x20 - 0x02, 0x20 + 0x02, 0x20 - 0x02, -0x20 + 0x02],
     a: [-0x10 - 0x01, 0x10 + 0x01, 0x10 - 0x01, -0x10 + 0x01],
     k: [-0x10, 0x10, -0x01, 0x01]
   });
 
-  var FLAGS = Object.freeze({
+  const FLAGS = Object.freeze({
     NORMAL: 'n',
     CAPTURE: 'c'
   });
 
-  var BITS = Object.freeze({
+  const BITS = Object.freeze({
     NORMAL: 1,
     CAPTURE: 2
   });
 
-  var SQUARES = Object.freeze({
+  const SQUARES = Object.freeze({
     a9: 0x00, b9: 0x01, c9: 0x02, d9: 0x03, e9: 0x04, f9: 0x05, g9: 0x06, h9: 0x07, i9: 0x08,
     a8: 0x10, b8: 0x11, c8: 0x12, d8: 0x13, e8: 0x14, f8: 0x15, g8: 0x16, h8: 0x17, i8: 0x18,
     a7: 0x20, b7: 0x21, c7: 0x22, d7: 0x23, e7: 0x24, f7: 0x25, g7: 0x26, h7: 0x27, i7: 0x28,
@@ -93,13 +93,13 @@ var Xiangqi = function(fen) {
     a0: 0x90, b0: 0x91, c0: 0x92, d0: 0x93, e0: 0x94, f0: 0x95, g0: 0x96, h0: 0x97, i0: 0x98
   });
 
-  var board = new Array(256);
-  var kings = { r: EMPTY, b: EMPTY };
-  var turn = RED;
-  var half_moves = 0;
-  var move_number = 1;
-  var history = [];
-  var header = {};
+  let board = new Array(256);
+  let kings = { r: EMPTY, b: EMPTY };
+  let turn = RED;
+  let half_moves = 0;
+  let move_number = 1;
+  let history = [];
+  let header = {};
 
   /* if the user passes in a fen string, load it, else default to starting position */
   if (typeof fen === 'undefined') {
@@ -136,21 +136,21 @@ var Xiangqi = function(fen) {
       return false;
     }
 
-    var tokens = fen.split(/\s+/);
-    var position = tokens[0];
-    var square = 0;
+    let tokens = fen.split(/\s+/);
+    let position = tokens[0];
+    let square = 0, piece, color;
 
     clear(keep_headers);
 
-    for (var i = 0; i < position.length; ++i) {
-      var piece = position.charAt(i);
+    for (let i = 0; i < position.length; ++i) {
+      piece = position.charAt(i);
 
       if (piece === '/') {
         square += 0x07;
       } else if (is_digit(piece)) {
         square += parseInt(piece, 10);
       } else {
-        var color = piece < 'a' ? RED : BLACK;
+        color = piece < 'a' ? RED : BLACK;
         put({ type: piece.toLowerCase(), color: color }, algebraic(square));
         square++;
       }
@@ -167,7 +167,7 @@ var Xiangqi = function(fen) {
   }
 
   function validate_fen(fen) {
-    var errors = {
+    const errors = {
       0: 'No errors.',
       1: 'FEN string must contain six space-delimited fields.',
       2: '6th field (move number) must be a positive integer.',
@@ -200,7 +200,7 @@ var Xiangqi = function(fen) {
     }
 
     /* 1st criterion: 6 space-separated fields? */
-    var tokens = fen.split(/\s+/);
+    const tokens = fen.split(/\s+/);
     if (tokens.length !== 6) {
       return result(1);
     }
@@ -231,13 +231,13 @@ var Xiangqi = function(fen) {
     }
 
     /* 7th criterion: 1st field contains 10 rows? */
-    var rows = tokens[0].split('/');
+    const rows = tokens[0].split('/');
     if (rows.length !== 10) {
       return result(7);
     }
 
     /* 8th criterion: every row is valid? */
-    var pieces = {
+    const pieces = {
         'p': {number: 0, squares: []}, 'P': {number: 0, squares: []},
         'c': {number: 0, squares: []}, 'C': {number: 0, squares: []},
         'r': {number: 0, squares: []}, 'R': {number: 0, squares: []},
@@ -245,13 +245,14 @@ var Xiangqi = function(fen) {
         'b': {number: 0, squares: []}, 'B': {number: 0, squares: []},
         'a': {number: 0, squares: []}, 'A': {number: 0, squares: []},
         'k': {number: 0, squares: []}, 'K': {number: 0, squares: []}
-      }, i;
+      };
+    let i, sum_fields, previous_was_number;
     for (i = 0; i < rows.length; i++) {
       /* check for right sum of fields AND not two numbers in succession */
-      var sum_fields = 0;
-      var previous_was_number = false;
+      sum_fields = 0;
+      previous_was_number = false;
 
-      for (var k = 0; k < rows[i].length; k++) {
+      for (let k = 0; k < rows[i].length; k++) {
         if (!isNaN(rows[i][k])) {
           if (previous_was_number) {
             return result(8);
@@ -302,32 +303,32 @@ var Xiangqi = function(fen) {
         out_of_place(KING, pieces.K.squares[0], BLACK)) {
       return result(18);
     }
-    for (i in pieces.a.squares) {
+    for (i = 0; i < pieces.a.squares.length; ++i) {
       if (out_of_place(ADVISER, pieces.a.squares[i], RED)) {
         return result(19);
       }
     }
-    for (i in pieces.A.squares) {
+    for (i = 0; i < pieces.A.squares.length; ++i) {
       if (out_of_place(ADVISER, pieces.A.squares[i], BLACK)) {
         return result(20);
       }
     }
-    for (i in pieces.b.squares) {
+    for (i = 0; i < pieces.b.squares.length; ++i) {
       if (out_of_place(BISHOP, pieces.b.squares[i], RED)) {
         return result(21);
       }
     }
-    for (i in pieces.B.squares) {
+    for (i = 0; i < pieces.B.squares.length; ++i) {
       if (out_of_place(BISHOP, pieces.B.squares[i], BLACK)) {
         return result(22);
       }
     }
-    for (i in pieces.p.squares) {
+    for (i = 0; i < pieces.p.squares.length; ++i) {
       if (out_of_place(PAWN, pieces.p.squares[i], RED)) {
         return result(23);
       }
     }
-    for (i in pieces.P.squares) {
+    for (i = 0; i < pieces.P.squares.length; ++i) {
       if (out_of_place(PAWN, pieces.P.squares[i], BLACK)) {
         return result(24);
       }
@@ -338,10 +339,9 @@ var Xiangqi = function(fen) {
   }
 
   function generate_fen() {
-    var empty = 0;
-    var fen = '';
+    let empty = 0, fen = '', color, piece;
 
-    for (var i = SQUARES.a9; i <= SQUARES.i0; ++i) {
+    for (let i = SQUARES.a9; i <= SQUARES.i0; ++i) {
       if (board[i] == null) {
         empty++;
       } else {
@@ -349,8 +349,8 @@ var Xiangqi = function(fen) {
           fen += empty;
           empty = 0;
         }
-        var color = board[i].color;
-        var piece = board[i].type;
+        color = board[i].color;
+        piece = board[i].type;
 
         fen += color === RED ? piece.toUpperCase() : piece.toLowerCase();
       }
@@ -373,7 +373,7 @@ var Xiangqi = function(fen) {
   }
 
   function set_header(args) {
-    for (var i = 0; i < args.length; i += 2) {
+    for (let i = 0; i < args.length; i += 2) {
       if (typeof args[i] === 'string' && typeof args[i + 1] === 'string') {
         header[args[i]] = args[i + 1];
       }
@@ -397,7 +397,7 @@ var Xiangqi = function(fen) {
   }
 
   function get(square) {
-    var piece = board[SQUARES[square]];
+    const piece = board[SQUARES[square]];
     return piece ? { type: piece.type, color: piece.color } : null;
   }
 
@@ -417,9 +417,9 @@ var Xiangqi = function(fen) {
       return false;
     }
 
-    var sq = SQUARES[square];
+    const sq = SQUARES[square];
 
-    /* don't var the user place more than one king */
+    /* don't let the user place more than one king */
     if (piece.type === KING &&
       !(kings[piece.color] === EMPTY || kings[piece.color] === sq)) {
       return false;
@@ -440,7 +440,7 @@ var Xiangqi = function(fen) {
   }
 
   function remove(square) {
-    var piece = get(square);
+    const piece = get(square);
     board[SQUARES[square]] = null;
     if (piece && piece.type === KING) {
       kings[piece.color] = EMPTY;
@@ -452,7 +452,7 @@ var Xiangqi = function(fen) {
   }
 
   function build_move(board, from, to, flags) {
-    var move = {
+    let move = {
       color: turn,
       from: from,
       to: to,
@@ -471,17 +471,17 @@ var Xiangqi = function(fen) {
       moves.push(build_move(board, from, to, flags));
     }
 
-    var moves = [];
-    var us = turn;
-    var them = swap_color(us);
+    let moves = [];
+    let us = turn;
+    let them = swap_color(us);
 
-    var first_sq = SQUARES.a9;
-    var last_sq = SQUARES.i0;
+    let first_sq = SQUARES.a9;
+    let last_sq = SQUARES.i0;
 
     /* do we want legal moves? */
-    var legal = typeof options !== 'undefined' && 'legal' in options ? options.legal : true;
+    const legal = typeof options !== 'undefined' && 'legal' in options ? options.legal : true;
     // do we need opponent moves?
-    var opponent = typeof options !== 'undefined' && 'opponent' in options ? options.opponent : false;
+    const opponent = typeof options !== 'undefined' && 'opponent' in options ? options.opponent : false;
 
     /* are we generating moves for a single square? */
     if (typeof options !== 'undefined' && 'square' in options) {
@@ -499,19 +499,19 @@ var Xiangqi = function(fen) {
       them = swap_color(us);
     }
 
-    var i, j, len;
+    let i, j, len, piece, OFFSETS, offset, square, crossed;
     for (i = first_sq; i <= last_sq; ++i) {
-      var piece = board[i];
+      piece = board[i];
       if (piece == null || piece.color !== us) continue;
 
-      var OFFSETS = piece.type === PAWN ? PAWN_OFFSETS[us] : PIECE_OFFSETS[piece.type];
+      OFFSETS = piece.type === PAWN ? PAWN_OFFSETS[us] : PIECE_OFFSETS[piece.type];
 
       for (j = 0, len = OFFSETS.length; j < len; ++j) {
         if (piece.type === PAWN && j > 0 && !crossed_river(i, us)) break;
 
-        var offset = OFFSETS[j];
-        var square = i;
-        var crossed = false;
+        offset = OFFSETS[j];
+        square = i;
+        crossed = false;
 
         while (true) {
           square += offset;
@@ -557,7 +557,7 @@ var Xiangqi = function(fen) {
     }
 
     /* filter out illegal moves */
-    var legal_moves = [];
+    let legal_moves = [];
     for (i = 0, len = moves.length; i < len; i++) {
       make_move(moves[i]);
       if (!king_attacked(us)) {
@@ -584,9 +584,9 @@ var Xiangqi = function(fen) {
    * 4. ... Ne7 is technically the valid SAN
    */
   function move_to_iccs(move, sloppy) {
-    var output = '';
+    let output = '';
 
-    // var disambiguator = get_disambiguator(move, sloppy);
+    // let disambiguator = get_disambiguator(move, sloppy);
 
     // if (move.piece !== PAWN) {
     //   output += move.piece.toUpperCase() + disambiguator;
@@ -604,9 +604,9 @@ var Xiangqi = function(fen) {
   }
 
   function king_attacked(us) {
-    var square = kings[us];
-    var them = swap_color(us);
-    var i, len, sq;
+    let square = kings[us];
+    let them = swap_color(us);
+    let i, len, sq;
 
     // knight
     for (i = 0, len = PIECE_OFFSETS[KNIGHT].length; i < len; ++i) {
@@ -616,10 +616,10 @@ var Xiangqi = function(fen) {
     }
     // king, rook, cannon
     for (i = 0, len = PIECE_OFFSETS[ROOK].length; i < len; ++i) {
-      var offset = PIECE_OFFSETS[ROOK][i];
-      var crossed = false;
+      let offset = PIECE_OFFSETS[ROOK][i];
+      let crossed = false;
       for (sq = square + offset; !out_of_board(sq); sq += offset) {
-        var piece = board[sq];
+        let piece = board[sq];
         if (piece != null) {
           if (piece.color === them) {
             if (crossed) {
@@ -657,14 +657,16 @@ var Xiangqi = function(fen) {
 
   function insufficient_material() {
     // TODO: more cases
-    var pieces = {};
-    var num_pieces = 0;
+    let pieces = {}, piece;
+    let num_pieces = 0;
 
-    for (var sq in SQUARES) {
-      var piece = board[SQUARES[sq]];
-      if (piece) {
-        pieces[piece.type] = (piece.type in pieces) ? pieces[piece.type] + 1 : 1;
-        num_pieces++;
+    for (let sq in SQUARES) {
+      if (SQUARES.hasOwnProperty(sq)) {
+        piece = board[SQUARES[sq]];
+        if (piece) {
+          pieces[piece.type] = (piece.type in pieces) ? pieces[piece.type] + 1 : 1;
+          num_pieces++;
+        }
       }
     }
 
@@ -684,12 +686,12 @@ var Xiangqi = function(fen) {
      * Zobrist key would be maintained in the make_move/undo_move functions,
      * avoiding the costly that we do below.
      */
-    var moves = [];
-    var positions = {};
-    var repetition = false;
+    let moves = [], move;
+    let positions = {};
+    let repetition = false;
 
     while (true) {
-      var move = undo_move();
+      move = undo_move();
       if (!move) break;
       moves.push(move);
     }
@@ -697,7 +699,7 @@ var Xiangqi = function(fen) {
     while (true) {
       /* remove the last four fields in the FEN string, they're not needed
        * when checking for draw by rep */
-      var fen = generate_fen()
+      let fen = generate_fen()
         .split(' ')
         .slice(0, 2)
         .join(' ');
@@ -756,18 +758,18 @@ var Xiangqi = function(fen) {
   }
 
   function undo_move() {
-    var old = history.pop();
+    const old = history.pop();
     if (old == null) {
       return null;
     }
 
-    var move = old.move;
+    const move = old.move;
     kings = old.kings;
     turn = old.turn;
     half_moves = old.half_moves;
     move_number = old.move_number;
 
-    var them = swap_color(turn);
+    const them = swap_color(turn);
 
     board[move.from] = board[move.to];
     board[move.from].type = move.piece; // to undo any s
@@ -782,20 +784,20 @@ var Xiangqi = function(fen) {
 
   /* this function is used to uniquely identify ambiguous moves */
   function get_disambiguator(move, sloppy) {
-    var moves = generate_moves({ legal: !sloppy });
+    const moves = generate_moves({ legal: !sloppy });
 
-    var from = move.from;
-    var to = move.to;
-    var piece = move.piece;
+    const from = move.from;
+    const to = move.to;
+    const piece = move.piece;
 
-    var ambiguities = 0;
-    var same_rank = 0;
-    var same_file = 0;
+    let ambiguities = 0;
+    let same_rank = 0;
+    let same_file = 0;
 
-    for (var i = 0, len = moves.length; i < len; i++) {
-      var ambig_from = moves[i].from;
-      var ambig_to = moves[i].to;
-      var ambig_piece = moves[i].piece;
+    for (let i = 0, len = moves.length; i < len; i++) {
+      let ambig_from = moves[i].from;
+      let ambig_to = moves[i].to;
+      let ambig_piece = moves[i].piece;
 
       /* if a move of the same piece type ends on the same to square, we'll
        * need to add a disambiguator to the algebraic notation
@@ -834,8 +836,8 @@ var Xiangqi = function(fen) {
   }
 
   function ascii() {
-    var s = '   +---------------------------+\n';
-    for (var i = SQUARES.a9; i <= SQUARES.i0; i++) {
+    let s = '   +---------------------------+\n';
+    for (let i = SQUARES.a9; i <= SQUARES.i0; i++) {
       /* display the rank */
       if (file(i) === 0) {
         s += ' ' + '9876543210'[rank(i)] + ' |';
@@ -845,10 +847,9 @@ var Xiangqi = function(fen) {
       if (board[i] == null) {
         s += ' . ';
       } else {
-        var piece = board[i].type;
-        var color = board[i].color;
-        var symbol =
-          color === RED ? piece.toUpperCase() : piece.toLowerCase();
+        let piece = board[i].type;
+        let color = board[i].color;
+        let symbol = color === RED ? piece.toUpperCase() : piece.toLowerCase();
         s += ' ' + symbol + ' ';
       }
 
@@ -866,14 +867,14 @@ var Xiangqi = function(fen) {
   // convert a move from Internet Chinese Chess Server (ICCS) to 0x9a coordinates
   function move_from_iccs(move, sloppy) {
     // strip off any move decorations: e.g Nf3+?!
-    var clean_move = stripped_iccs(move);
+    let clean_move = stripped_iccs(move);
 
     // if we're using the sloppy parser run a regex to grab piece, to, and from
     // this should parse invalid ICCS like: h2e2, H7-E7
-    var matches = clean_move.match(
+    let matches = clean_move.match(
       /([a-iA-I][0-9])-?([a-iA-I][0-9])/
     );
-    var piece, from, to;
+    let piece, from, to;
     // TODO: support sloppy (must integrate with WXF)
     if (sloppy) {
       if (matches) {
@@ -883,8 +884,8 @@ var Xiangqi = function(fen) {
       }
     }
 
-    var moves = generate_moves();
-    for (var i = 0, len = moves.length; i < len; i++) {
+    let moves = generate_moves();
+    for (let i = 0, len = moves.length; i < len; i++) {
       // try the strict parser first, then the sloppy parser if requested by the user
       if (
         clean_move === stripped_iccs(move_to_iccs(moves[i])) ||
@@ -918,7 +919,7 @@ var Xiangqi = function(fen) {
   }
 
   function algebraic(i) {
-    var f = file(i), r = rank(i);
+    const f = file(i), r = rank(i);
     return 'abcdefghi'.substring(f, f + 1) + '9876543210'.substring(r, r + 1);
   }
 
@@ -940,7 +941,7 @@ var Xiangqi = function(fen) {
 
   function out_of_place(piece, square, color) {
     // K, A, B, P
-    var side = {};
+    let side = {};
     if (piece === PAWN) {
       side = [0, 2, 4, 6, 8];
       if (color === RED) {
@@ -968,25 +969,25 @@ var Xiangqi = function(fen) {
   }
 
   function hobbling_horse_leg(square, index) {
-    var orientation = [-0x10, 0x10, -0x01, 0x01];
+    const orientation = [-0x10, 0x10, -0x01, 0x01];
     return board[square + orientation[Math.floor(index / 2)]] != null;
   }
 
   function blocking_elephant_eye(square, index) {
-    var orientation = [-0x10 - 0x01, 0x10 + 0x01,  0x10 - 0x01, -0x10 + 0x01];
+    const orientation = [-0x10 - 0x01, 0x10 + 0x01,  0x10 - 0x01, -0x10 + 0x01];
     return board[square + orientation[index]] != null;
   }
 
   /* pretty = external move object */
   function make_pretty(ugly_move) {
-    var move = clone(ugly_move);
+    let move = clone(ugly_move);
     move.iccs = move_to_iccs(move, false);
     move.to = algebraic(move.to);
     move.from = algebraic(move.from);
 
-    var flags = '';
+    let flags = '';
 
-    for (var flag in BITS) {
+    for (let flag in BITS) {
       if ((BITS[flag] & move.flags) > 0) {
         flags += FLAGS[flag];
       }
@@ -997,9 +998,9 @@ var Xiangqi = function(fen) {
   }
 
   function clone(obj) {
-    var dupe = obj instanceof Array ? [] : {};
+    let dupe = obj instanceof Array ? [] : {};
 
-    for (var property in obj) {
+    for (let property in obj) {
       if (typeof property === 'object') {
         dupe[property] = clone(obj[property]);
       } else {
@@ -1018,14 +1019,14 @@ var Xiangqi = function(fen) {
    * DEBUGGING UTILITIES
    ****************************************************************************/
   function perft(depth) {
-    var moves = generate_moves({ legal: false });
-    var nodes = 0;
+    const moves = generate_moves({ legal: false });
+    let nodes = 0;
 
-    for (var i = 0, len = moves.length; i < len; i++) {
+    for (let i = 0, len = moves.length; i < len; i++) {
       make_move(moves[i]);
       if (!king_attacked(turn)) {
         if (depth - 1 > 0) {
-          var child_nodes = perft(depth - 1);
+          let child_nodes = perft(depth - 1);
           nodes += child_nodes;
         } else {
           nodes++;
@@ -1054,11 +1055,11 @@ var Xiangqi = function(fen) {
       /* from the ECMA-262 spec (section 12.6.4):
        * "The mechanics of enumerating the properties ... is
        * implementation dependent"
-       * so: for (var sq in SQUARES) { keys.push(sq); } might not be
+       * so: for (let sq in SQUARES) { keys.push(sq); } might not be
        * ordered correctly
        */
-      var keys = [];
-      for (var i = SQUARES.a9; i <= SQUARES.i0; i++) {
+      let keys = [];
+      for (let i = SQUARES.a9; i <= SQUARES.i0; i++) {
         if (file(i) === 0x09) {
           i += 6;
           continue;
@@ -1087,10 +1088,10 @@ var Xiangqi = function(fen) {
        * unnecessary move keys resulting from a verbose call.
        */
 
-      var ugly_moves = generate_moves(options);
-      var moves = [];
+      const ugly_moves = generate_moves(options);
+      let moves = [];
 
-      for (var i = 0, len = ugly_moves.length; i < len; i++) {
+      for (let i = 0, len = ugly_moves.length; i < len; i++) {
         // does the user want a full move object (most likely not), or just ICCS
         if (
           typeof options !== 'undefined' &&
@@ -1155,10 +1156,9 @@ var Xiangqi = function(fen) {
     },
 
     board: function() {
-      var output = [],
-        row = [];
+      let output = [], row = [];
 
-      for (var i = SQUARES.a9; i <= SQUARES.i0; i++) {
+      for (let i = SQUARES.a9; i <= SQUARES.i0; i++) {
         if (board[i] == null) {
           row.push(null);
         } else {
@@ -1178,13 +1178,13 @@ var Xiangqi = function(fen) {
       /* using the specification from http://www.xqbase.com/protocol/cchess_pgn.htm
        * example for html usage: .pgn({ max_width: 72, newline_char: "<br />" })
        */
-      var newline = typeof options === 'object' &&
+      let newline = typeof options === 'object' &&
         typeof options.newline_char === 'string' ? options.newline_char : '\n';
-      var max_width = typeof options === 'object' &&
+      let max_width = typeof options === 'object' &&
         typeof options.max_width === 'number' ? options.max_width : 0;
-      var result = [];
-      var header_exists = false;
-      var i;
+      let result = [];
+      let header_exists = false;
+      let i;
 
       /* add the PGN header headerrmation */
       for (i in header) {
@@ -1200,17 +1200,17 @@ var Xiangqi = function(fen) {
       }
 
       /* pop all of history onto reversed_history */
-      var reversed_history = [];
+      let reversed_history = [];
       while (history.length > 0) {
         reversed_history.push(undo_move());
       }
 
-      var moves = [];
-      var move_string = '';
+      let moves = [];
+      let move_string = '';
 
       /* build the list of moves.  a move_string looks like: "3. b2b6 b9c7" */
       while (reversed_history.length > 0) {
-        var move = reversed_history.pop();
+        let move = reversed_history.pop();
 
         /* if the position started with black to move, start PGN with 1. ... */
         if (!history.length && move.color === 'b') {
@@ -1245,7 +1245,7 @@ var Xiangqi = function(fen) {
       }
 
       /* wrap the PGN output at max_width */
-      var current_width = 0;
+      let current_width = 0;
       for (i = 0; i < moves.length; i++) {
         /* if the current move will push past max_width */
         if (current_width + moves[i].length > max_width && i !== 0) {
@@ -1270,7 +1270,7 @@ var Xiangqi = function(fen) {
     load_pgn: function(pgn, options) {
       // allow the user to specify the sloppy move parser to work around over
       // disambiguation bugs in Fritz and Chessbase
-      var sloppy = typeof options !== 'undefined' && 'sloppy' in options ?
+      let sloppy = typeof options !== 'undefined' && 'sloppy' in options ?
         options.sloppy : false;
 
       function mask(str) {
@@ -1278,23 +1278,23 @@ var Xiangqi = function(fen) {
       }
 
       function has_keys(object) {
-        for (var key in object) {
+        for (let key in object) {
           if (object.hasOwnProperty(key)) return true;
         }
         return false;
       }
 
       function parse_pgn_header(header, options) {
-        var newline_char =
+        let newline_char =
           typeof options === 'object' &&
           typeof options.newline_char === 'string' ?
             options.newline_char : '\r?\n';
-        var header_obj = {};
-        var headers = header.split(new RegExp(mask(newline_char)));
-        var key = '';
-        var value = '';
+        let header_obj = {};
+        let headers = header.split(new RegExp(mask(newline_char)));
+        let key = '';
+        let value = '';
 
-        for (var i = 0; i < headers.length; i++) {
+        for (let i = 0; i < headers.length; i++) {
           key = headers[i].replace(/^\[([A-Z][A-Za-z]*)\s.*]$/, '$1');
           value = headers[i].replace(/^\[[A-Za-z]+\s"(.*)"]$/, '$1');
           if (trim(key).length > 0) {
@@ -1305,14 +1305,14 @@ var Xiangqi = function(fen) {
         return header_obj;
       }
 
-      var newline_char =
+      const newline_char =
         typeof options === 'object' && typeof options.newline_char === 'string' ?
           options.newline_char : '\r?\n';
 
       // RegExp to split header. Takes advantage of the fact that header and movetext
       // will always have a blank line between them (ie, two newline_char's).
       // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n){2}/
-      var header_regex = new RegExp(
+      const header_regex = new RegExp(
         '^(\\[((?:' +
           mask(newline_char) +
           ')|.)*\\])' +
@@ -1322,14 +1322,14 @@ var Xiangqi = function(fen) {
       );
 
       // If no header given, begin with moves.
-      var header_string = header_regex.test(pgn) ? header_regex.exec(pgn)[1] : '';
+      const header_string = header_regex.test(pgn) ? header_regex.exec(pgn)[1] : '';
 
       // Put the board in the starting position
       reset();
 
       /* parse PGN header */
-      var headers = parse_pgn_header(header_string, options);
-      for (var key in headers) {
+      const headers = parse_pgn_header(header_string, options);
+      for (let key in headers) {
         if (headers.hasOwnProperty(key))
           set_header([key, headers[key]]);
       }
@@ -1343,7 +1343,7 @@ var Xiangqi = function(fen) {
       }
 
       /* delete header to get the moves */
-      var ms = pgn
+      let ms = pgn
         .replace(header_string, '')
         .replace(new RegExp(mask(newline_char), 'g'), ' ');
 
@@ -1351,7 +1351,7 @@ var Xiangqi = function(fen) {
       ms = ms.replace(/({[^}]+})+?/g, '');
 
       /* delete recursive annotation variations */
-      var rav_regex = /(\([^()]+\))+?/g;
+      const rav_regex = /(\([^()]+\))+?/g;
       while (rav_regex.test(ms)) {
         ms = ms.replace(rav_regex, '');
       }
@@ -1366,16 +1366,16 @@ var Xiangqi = function(fen) {
       ms = ms.replace(/\$\d+/g, '');
 
       /* trim and get array of moves */
-      var moves = trim(ms).split(new RegExp(/\s+/));
+      let moves = trim(ms).split(new RegExp(/\s+/));
 
       /* delete empty entries */
       moves = moves
         .join(',')
         .replace(/,,+/g, ',')
         .split(',');
-      var move = '';
+      let move = '';
 
-      for (var half_move = 0; half_move < moves.length - 1; half_move++) {
+      for (let half_move = 0; half_move < moves.length - 1; half_move++) {
         move = move_from_iccs(moves[half_move], sloppy);
 
         /* move not possible! (don't clear the board to examine to show the
@@ -1429,18 +1429,18 @@ var Xiangqi = function(fen) {
 
       // allow the user to specify the sloppy move parser to work around over
       // disambiguation bugs in Fritz and Chessbase
-      var sloppy = typeof options !== 'undefined' && 'sloppy' in options ?
+      const sloppy = typeof options !== 'undefined' && 'sloppy' in options ?
         options.sloppy : false;
 
-      var move_obj = null;
+      let move_obj = null;
 
       if (typeof move === 'string') {
         move_obj = move_from_iccs(move, sloppy);
       } else if (typeof move === 'object') {
-        var moves = generate_moves();
+        let moves = generate_moves();
 
         /* convert the pretty move object to an ugly move object */
-        for (var i = 0, len = moves.length; i < len; i++) {
+        for (let i = 0, len = moves.length; i < len; i++) {
           if (
             move.from === algebraic(moves[i].from) &&
             move.to === algebraic(moves[i].to) &&
@@ -1460,7 +1460,7 @@ var Xiangqi = function(fen) {
       /* need to make a copy of move because we can't generate SAN after the
        * move is made
        */
-      var pretty_move = make_pretty(move_obj);
+      const pretty_move = make_pretty(move_obj);
 
       make_move(move_obj);
 
@@ -1468,7 +1468,7 @@ var Xiangqi = function(fen) {
     },
 
     undo: function() {
-      var move = undo_move();
+      const move = undo_move();
       return move ? make_pretty(move) : null;
     },
 
@@ -1493,9 +1493,9 @@ var Xiangqi = function(fen) {
     },
 
     history: function(options) {
-      var reversed_history = [];
-      var move_history = [];
-      var verbose =
+      let reversed_history = [];
+      let move_history = [];
+      let verbose =
         typeof options !== 'undefined' &&
         'verbose' in options &&
         options.verbose;
@@ -1505,7 +1505,7 @@ var Xiangqi = function(fen) {
       }
 
       while (reversed_history.length > 0) {
-        var move = reversed_history.pop();
+        let move = reversed_history.pop();
         if (verbose) {
           move_history.push(make_pretty(move));
         } else {
