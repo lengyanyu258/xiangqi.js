@@ -12,12 +12,12 @@ xiangqi.js has been extensively tested in node.js and most modern browsers.
 The code below plays a complete game of xiangqi ... randomly.
 
 ```js
-var Xiangqi = require('./xiangqi').Xiangqi;
-var xiangqi = new Xiangqi();
+const Xiangqi = require('./xiangqi').Xiangqi;
+const xiangqi = new Xiangqi();
 
 while (!xiangqi.game_over()) {
-  var moves = xiangqi.moves();
-  var move = moves[Math.floor(Math.random() * moves.length)];
+  const moves = xiangqi.moves();
+  const move = moves[Math.floor(Math.random() * moves.length)];
   xiangqi.move(move);
 }
 console.log(xiangqi.pgn());
@@ -37,17 +37,17 @@ But there are many differences between [Chess FEN](http://www.xqbase.com/protoco
 
 ```js
 // board defaults to the starting position when called with no parameters
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 // pass in a FEN string to load a particular position
-var xiangqi = new Xiangqi('5kC2/4a1N2/3a5/9/9/9/9/r3C4/4p4/2rK4R r - - 0 1');
+const xiangqi = new Xiangqi('5kC2/4a1N2/3a5/9/9/9/9/r3C4/4p4/2rK4R r - - 0 1');
 ```
 
 ### .ascii()
 Returns a string containing an ASCII diagram of the current position.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 // make some moves
 xiangqi.move('e3e4');
@@ -76,7 +76,7 @@ Returns an 2D array representation of the current position.  Empty squares are
 represented by `null`.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 xiangqi.board();
 // -> [[{type: 'r', color: 'b'},
@@ -121,7 +121,7 @@ xiangqi.fen();
 Returns the FEN string for the current position.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 // make some moves
 xiangqi.move('e3e4');
@@ -136,7 +136,7 @@ xiangqi.fen();
 Returns true if the game has ended via checkmate, stalemate, draw, threefold repetition, or insufficient material. Otherwise, returns false.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 xiangqi.game_over();
 // -> false
 
@@ -168,7 +168,7 @@ parameter which may contain a `verbose` flag.  See .moves() for a description of
 verbose move fields.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 xiangqi.move('e3e4');
 xiangqi.move('e6e5');
 xiangqi.move('g3g4');
@@ -188,7 +188,7 @@ xiangqi.history({ verbose: true });
 Returns true or false if the side to move is in check.
 
 ```js
-var xiangqi = new Xiangqi('rnbakab1r/9/1c5c1/p1p5p/4p1p2/4P1P2/P1P3nCP/1C3A3/4NK3/RNB2AB1R r - - 0 1');
+const xiangqi = new Xiangqi('rnbakab1r/9/1c5c1/p1p5p/4p1p2/4P1P2/P1P3nCP/1C3A3/4NK3/RNB2AB1R r - - 0 1');
 xiangqi.in_check();
 // -> true
 ```
@@ -197,7 +197,7 @@ xiangqi.in_check();
 Returns true or false if the side to move has been checkmated.
 
 ```js
-var xiangqi = new Xiangqi('rnbakab1r/9/1c5c1/p1p5p/4p1p2/4P1P2/P1P3nCP/1C3A3/4NK3/RNB2AB1R r - - 0 1');
+const xiangqi = new Xiangqi('rnbakab1r/9/1c5c1/p1p5p/4p1p2/4P1P2/P1P3nCP/1C3A3/4NK3/RNB2AB1R r - - 0 1');
 xiangqi.in_checkmate();
 // -> true
 ```
@@ -206,7 +206,7 @@ xiangqi.in_checkmate();
 Returns true or false if the game is drawn (60-move rule or insufficient material).
 
 ```js
-var xiangqi = new Xiangqi('4k1b2/9/4b4/9/9/9/9/4B4/9/4K1B2 r - - 0 1');
+const xiangqi = new Xiangqi('4k1b2/9/4b4/9/9/9/9/4B4/9/4K1B2 r - - 0 1');
 xiangqi.in_draw();
 // -> true
 ```
@@ -215,7 +215,7 @@ xiangqi.in_draw();
 Returns true or false if the side to move has been stalemated.
 
 ```js
-var xiangqi = new Xiangqi('3aca3/1Cnrk4/b3r4/2p1n4/2b6/9/9/9/4C4/ppppcK3 b - - 0 1');
+const xiangqi = new Xiangqi('3aca3/1Cnrk4/b3r4/2p1n4/2b6/9/9/9/4C4/ppppcK3 b - - 0 1');
 xiangqi.in_stalemate();
 // -> true
 ```
@@ -225,7 +225,7 @@ Returns true or false if the current board position has occurred three or more
 times.
 
 ```js
-var xiangqi = new Xiangqi('rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1');
+const xiangqi = new Xiangqi('rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1');
 // -> true
 // rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - occurs 1st time
 xiangqi.in_threefold_repetition();
@@ -266,7 +266,7 @@ xiangqi.header();
 Returns true if the game is drawn due to insufficient material (K vs. K or KBA vs. KBA); otherwise false.
 
 ```js
-var xiangqi = new Xiangqi('4k1b2/9/4b4/9/9/9/9/4B4/9/4K1B2 r - - 0 1');
+const xiangqi = new Xiangqi('4k1b2/9/4b4/9/9/9/9/4B4/9/4K1B2 r - - 0 1');
 xiangqi.insufficient_material()
 // -> true
 ```
@@ -276,7 +276,7 @@ The board is cleared, and the FEN string is loaded.  Returns true if the positio
 successfully loaded, otherwise false.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 xiangqi.load('1nbakabn1/9/1c5c1/p1p3p1p/4p4/4P4/P1P3P1P/1C5C1/9/1NBAKABN1 b - - 1 2');
 // -> true
 
@@ -305,7 +305,7 @@ non-SAN notations.
 The method will return `true` if the PGN was parsed successfully, otherwise `false`.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 pgn = ['[Game "Chinese Chess"]',
        '[Event "1982年全国赛"]',
        '[Date "1982.12.11"]',
@@ -359,7 +359,7 @@ xiangqi.ascii();
 
 
 // Parse non-standard move formats and unusual line separators
-var sloppy_pgn = ['[Event "Wijk aan Zee (Netherlands)"]',
+const sloppy_pgn = ['[Event "Wijk aan Zee (Netherlands)"]',
   '[Date "1971.01.26"]',
   '[Result "1-0"]',
   '[White "Tigran Vartanovich Petrosian"]',
@@ -376,7 +376,7 @@ var sloppy_pgn = ['[Event "Wijk aan Zee (Netherlands)"]',
   '8. Qb3 1-0'
 ].join('|');
 
-var options = {
+const options = {
   newline_char: '\\|', // Literal '|' character escaped
   sloppy: true
 };
@@ -397,7 +397,7 @@ legal, otherwise null.  The .move function can be called two ways, by passing
 a string in Internet Chinese Chess Server (ICCS):
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 xiangqi.move('e3e4');
 // -> { color: 'r', from: 'e3', to: 'e4', flags: 'n', piece: 'p', iccs: 'e3e4' }
@@ -413,7 +413,7 @@ Or by passing .move() a move object (only the 'to', 'from', and when necessary
 'promotion', fields are needed):
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 xiangqi.move({ from: 'g3', to: 'g4' });
 // -> { color: 'r', from: 'g3', to: 'g4', flags: 'n', piece: 'p', iccs: 'g3g4' }
@@ -450,7 +450,7 @@ xiangqi.move('Nge7', {sloppy: true});
 Returns a list of legal moves from the current position.  The function takes an optional parameter which controls the single-square move generation and verbosity.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 xiangqi.moves();
 // -> [ 'a3a4', 'c3c4', 'e3e4', 'g3g4', 'i3i4', 'b2b3', 'b2b4', 'b2b5', 'b2b6', 'b2b9', 'b2b1',
 //      'b2a2', 'b2c2', 'b2d2', 'b2e2', 'b2f2', 'b2g2', 'h2h3', 'h2h4', 'h2h5', 'h2h6', 'h2h9',
@@ -493,7 +493,7 @@ Returns the game in PGN format. Options is an optional parameter which may inclu
 max width and/or a newline character settings.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 xiangqi.header('Red', '吕钦', 'Black', '许银川');
 xiangqi.move('h2e2');
 xiangqi.move('h9g7');
@@ -567,7 +567,7 @@ xiangqi.turn();
 Takeback the last half-move, returning a move object if successful, otherwise null.
 
 ```js
-var xiangqi = new Xiangqi();
+const xiangqi = new Xiangqi();
 
 xiangqi.fen();
 // -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1'
