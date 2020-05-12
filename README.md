@@ -564,7 +564,7 @@ xiangqi.turn();
 ```
 
 ### .undo()
-Takeback the last half-move, returning a move object if successful, otherwise null.
+Take back the last half-move, returning a move object if successful, otherwise null.
 
 ```js
 const xiangqi = new Xiangqi();
@@ -580,6 +580,30 @@ xiangqi.undo();
 xiangqi.fen();
 // -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1'
 xiangqi.undo();
+// -> null
+```
+
+### .redo()
+Take forward the last half-move, returning a move object if successful, otherwise null.
+
+```js
+const xiangqi = new Xiangqi();
+
+xiangqi.fen();
+// -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1'
+xiangqi.move('e3e4');
+xiangqi.fen();
+// -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/4P4/P1P3P1P/1C5C1/9/RNBAKABNR b - - 1 1'
+xiangqi.undo();
+// -> { color: 'r', from: 'e3', to: 'e4', flags: 'n', piece: 'p', iccs: 'e3e4' }
+xiangqi.fen();
+// -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1'
+
+xiangqi.redo();
+// -> { color: 'r', from: 'e3', to: 'e4', flags: 'n', piece: 'p', iccs: 'e3e4' }
+xiangqi.fen();
+// -> 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/4P4/P1P3P1P/1C5C1/9/RNBAKABNR b - - 1 1'
+xiangqi.redo();
 // -> null
 ```
 

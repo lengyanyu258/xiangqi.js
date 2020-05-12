@@ -99,6 +99,7 @@ const Xiangqi = function(fen) {
   let half_moves = 0;
   let move_number = 1;
   let history = [];
+  let futures = [];
   let header = {};
 
   /* if the user passes in a fen string, load it, else default to starting position */
@@ -119,6 +120,7 @@ const Xiangqi = function(fen) {
     half_moves = 0;
     move_number = 1;
     history = [];
+    futures = [];
     if (!keep_headers) header = {};
     update_setup(generate_fen());
   }
@@ -719,8 +721,8 @@ const Xiangqi = function(fen) {
     return repetition;
   }
 
-  function push(move) {
-    history.push({
+  function push(list, move) {
+    list.push({
       move: move,
       kings: { b: kings.b, r: kings.r },
       turn: turn,
@@ -730,7 +732,8 @@ const Xiangqi = function(fen) {
   }
 
   function make_move(move) {
-    push(move);
+    push(history, move);
+    futures = [];
 
     // if king was captured
     if (board[move.to] != null && board[move.to].type === KING)
@@ -757,8 +760,7 @@ const Xiangqi = function(fen) {
     turn = swap_color(turn);
   }
 
-  function undo_move() {
-    const old = history.pop();
+  function set_move(old) {
     if (old == null) {
       return null;
     }
@@ -780,6 +782,14 @@ const Xiangqi = function(fen) {
     }
 
     return move;
+  }
+
+  function undo_move() {
+    return set_move(history.pop());
+  }
+
+  function redo_move() {
+    return set_move(futures.pop());
   }
 
   /* this function is used to uniquely identify ambiguous moves */
@@ -1468,8 +1478,30 @@ const Xiangqi = function(fen) {
     },
 
     undo: function() {
+      push(futures, null);
       const move = undo_move();
-      return move ? make_pretty(move) : null;
+      if (move) {
+        const pretty_move = make_pretty(move);
+        [move.from, move.to] = [move.to, move.from];
+        futures[futures.length - 1].move = move;
+        return pretty_move;
+      } else {
+        futures.pop();
+        return null;
+      }
+    },
+
+    redo: function() {
+      push(history, null);
+      const move = redo_move();
+      if (move) {
+        [move.from, move.to] = [move.to, move.from];
+        history[history.length - 1].move = move;
+        return make_pretty(move);
+      } else {
+        history.pop();
+        return null;
+      }
     },
 
     clear: function() {
