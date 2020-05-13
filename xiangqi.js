@@ -733,7 +733,6 @@ const Xiangqi = function(fen) {
 
   function make_move(move) {
     push(history, move);
-    futures = [];
 
     // if king was captured
     if (board[move.to] != null && board[move.to].type === KING)
@@ -1473,6 +1472,7 @@ const Xiangqi = function(fen) {
       const pretty_move = make_pretty(move_obj);
 
       make_move(move_obj);
+      futures = [];
 
       return pretty_move;
     },
