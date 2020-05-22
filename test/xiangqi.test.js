@@ -1,3 +1,10 @@
+// noinspection NpmUsedModulesInstalled
+const describe = require('@jest/globals').describe;
+// noinspection NpmUsedModulesInstalled
+const test = require('@jest/globals').test;
+// noinspection NpmUsedModulesInstalled
+const expect = require('@jest/globals').expect;
+
 const Xiangqi = require('../xiangqi').Xiangqi;
 
 /*
@@ -13,13 +20,13 @@ describe('Perft', () => {
       depth: 3, nodes: 23509},
   ];
 
-  perfts.forEach(function(perft) {
+  perfts.forEach(perft => {
     var xiangqi = new Xiangqi();
     xiangqi.load(perft.fen);
 
     test(perft.fen, () => {
       var nodes = xiangqi.perft(perft.depth);
-      expect(nodes === perft.nodes);
+      expect(nodes).toBe(perft.nodes);
     });
 
   });
@@ -67,20 +74,10 @@ describe('Single Square Move Generation', () => {
     const xiangqi = new Xiangqi();
     xiangqi.load(position.fen);
 
-    test(position.fen + ' ' + position.square, () => {
+    test(`${position.fen} ${position.square}`, () => {
 
       const moves = xiangqi.moves({ square: position.square, verbose: position.verbose });
-      expect(moves).toHaveLength(position.moves.length);
-
-      for (let j = 0; j < moves.length; j++) {
-        if (position.verbose) {
-          for (let k = 0; k < moves[j].length; ++k) {
-            expect(moves[j][k]).toBe(position.moves[j][k]);
-          }
-        } else {
-          expect(moves[j]).toBe(position.moves[j]);
-        }
-      }
+      expect(moves).toEqual(position.moves);
 
     });
 
@@ -99,7 +96,7 @@ describe('Checkmate', () => {
     'rnbakab1r/9/1c5c1/p1p5p/4p1p2/4P1P2/P1P3nCP/1C3A3/4NK3/RNB2AB1R r - - 0 1'
   ];
 
-  checkmates.forEach(function(checkmate) {
+  checkmates.forEach(checkmate => {
     const xiangqi = new Xiangqi();
     xiangqi.load(checkmate);
 
@@ -118,12 +115,12 @@ describe('Stalemate', () => {
     '4k4/4a4/9/9/9/9/9/9/3r1r3/4K4 r - - 0 2'
   ];
 
-  stalemates.forEach(function(stalemate) {
+  stalemates.forEach(stalemate => {
     const xiangqi = new Xiangqi();
     xiangqi.load(stalemate);
 
     test(stalemate, () => {
-      expect(xiangqi.in_stalemate()).toBe(true);
+      expect(xiangqi.in_stalemate()).toBeTruthy();
     });
 
   });
@@ -146,7 +143,7 @@ describe('Insufficient Material', () => {
     { fen: '5kC2/4a1N2/3a5/9/9/9/9/r3C4/4p4/2rK4R r - - 0 1', draw: false }
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
     const xiangqi = new Xiangqi();
     xiangqi.load(position.fen);
 
@@ -192,22 +189,22 @@ describe('Threefold Repetition', () => {
     }
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
     const xiangqi = new Xiangqi();
     xiangqi.load(position.fen);
 
     test(position.fen, () => {
 
       for (let j = 0; j < position.moves.length; j++) {
-        expect(xiangqi.in_threefold_repetition()).toBe(false);
+        expect(xiangqi.in_threefold_repetition()).toBeFalsy();
         xiangqi.move(position.moves[j]);
       }
 
-      // expect(xiangqi.in_threefold_repetition() && !xiangqi.in_draw()).toBe(true);
+      // expect(xiangqi.in_threefold_repetition() && !xiangqi.in_draw()).toBeTruthy();
 
       // TODO: Just a temporary workaround, should be refined in the future.
-      expect(xiangqi.in_threefold_repetition()).toBe(true);
-      expect(xiangqi.in_draw()).toBe(true);
+      expect(xiangqi.in_threefold_repetition()).toBeTruthy();
+      expect(xiangqi.in_draw()).toBeTruthy();
 
     });
 
@@ -256,7 +253,7 @@ describe('Algebraic Notation', () => {
              'N4b3', 'Kb8']},
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
     var xiangqi = new Xiangqi();
     var passed = true;
     xiangqi.load(position.fen);
@@ -273,7 +270,7 @@ describe('Algebraic Notation', () => {
           }
         }
       }
-      expect(passed).toBe(true);
+      expect(passed).toBeTruthy();
     });
 
   });
@@ -285,7 +282,7 @@ describe('Get/Put/Remove', () => {
 
   const xiangqi = new Xiangqi();
   let passed = true;
-  // noinspection JSDuplicatedDeclaration
+  // noinspection JSDuplicatedDeclaration,JSAnnotator
   const positions = [
     {
       pieces: {
@@ -346,12 +343,12 @@ describe('Get/Put/Remove', () => {
     }
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
 
     passed = true;
     xiangqi.clear();
 
-    test('position should pass - ' + position.should_pass, () => {
+    test(`position should pass - ${position.should_pass}`, () => {
       let square, j, piece;
 
       /* places the pieces */
@@ -432,10 +429,10 @@ describe('FEN', () => {
     { fen: '1nbakabn1/9/1c5c1/p1p3p1X/4p4/4P4/P1P3P1P/1C5C1/9/1NBAKABN1 b - - 1 2', should_pass: false }
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
     const xiangqi = new Xiangqi();
 
-    test(position.fen + ' (' + position.should_pass + ')', () => {
+    test(`${position.fen} (${position.should_pass})`, () => {
       xiangqi.load(position.fen);
       expect(xiangqi.fen() === position.fen).toBe(position.should_pass);
     });
@@ -489,15 +486,15 @@ describe('PGN (Chinese Format)', () => {
      fen: 'r1bqk1nr/ppp2ppp/2np4/b3p3/2BPP3/2P2N2/P4PPP/RNBQ1RK1 b kq d3 0 3'}
     ];
 
-  positions.forEach(function(position, i) {
+  positions.forEach((position, i) => {
 
-    test(i, () => {
+    test(`Postion: ${i}`, () => {
       var xiangqi = ('starting_position' in position) ? new Xiangqi(position.starting_position) : new Xiangqi();
       passed = true;
       error_message = '';
       for (var j = 0; j < position.moves.length; j++) {
         if (xiangqi.move(position.moves[j]) === null) {
-          error_message = 'move() did not accept ' + position.moves[j] + ' : ';
+          error_message = `move() did not accept ${position.moves[j]} : `;
           break;
         }
       }
@@ -506,7 +503,7 @@ describe('PGN (Chinese Format)', () => {
       var pgn = xiangqi.pgn({max_width:position.max_width, newline_char:position.newline_char});
       var fen = xiangqi.fen();
       passed = pgn === position.pgn && fen === position.fen;
-      expect(passed && error_message.length === 0).toBe(true);
+      expect(passed && error_message.length === 0).toBeTruthy();
     });
 
   });
@@ -950,9 +947,9 @@ describe('Load PGN (Chinese Format)', () => {
 
   var newline_chars = ['\n', '<br />', '\r\n', 'BLAH'];
 
-  tests.forEach(function(t, i) {
-    newline_chars.forEach(function(newline, j) {
-      test(i + String.fromCharCode(97 + j), () => {
+  tests.forEach((t, i) => {
+    newline_chars.forEach((newline, j) => {
+      test(`${i}${String.fromCharCode(97 + j)}`, () => {
         var sloppy = t.sloppy || false;
         var result = xiangqi.load_pgn(t.pgn.join(newline), {sloppy: sloppy,
                                                           newline_char: newline});
@@ -965,14 +962,14 @@ describe('Load PGN (Chinese Format)', () => {
         // so we'll need compare the results of the load against a FEN string
         // (instead of the reconstructed PGN [e.g. test.pgn.join(newline)])
           if ('fen' in t) {
-            expect(result && xiangqi.fen() === t.fen).toBe(true);
+            expect(result && xiangqi.fen() === t.fen).toBeTruthy();
           } else {
             expect(result && xiangqi.pgn({ max_width: 65, newline_char: newline }) === t.pgn.join(newline)).toBe(true);
           }
 
         } else {
           // this test should fail, so make sure it does
-          expect(result === should_pass).toBe(true);
+          expect(result === should_pass).toBeTruthy();
         }
       });
 
@@ -1012,10 +1009,10 @@ describe('Load PGN (Chinese Format)', () => {
          '61. 兵八平九 车１平２ 62. 兵九平八 车２平１ 63. 兵八平九 1/2-1/2';
 
     var result = xiangqi.load_pgn(pgn, { newline_char: '\r?\n' });
-    expect(result).toBe(true);
+    expect(result).toBeTruthy();
 
-    expect(xiangqi.load_pgn(pgn)).toBe(true);
-    expect(xiangqi.pgn().match(/^\[\[/) === null).toBe(true);
+    expect(xiangqi.load_pgn(pgn)).toBeTruthy();
+    expect(xiangqi.pgn().match(/^\[\[/) === null).toBeTruthy();
   });
 
 });
@@ -1104,14 +1101,14 @@ describe('PGN (ICCS Format)', () => {
     }
   ];
 
-  positions.forEach(function(position, i) {
+  positions.forEach((position, i) => {
 
-    test(i.toString(), () => {
+    test(`Postion: ${i}`, () => {
       const xiangqi = ('starting_position' in position) ? new Xiangqi(position.starting_position) : new Xiangqi();
       error_message = '';
       for (let j = 0; j < position.moves.length; j++) {
         if (xiangqi.move(position.moves[j]) === null) {
-          error_message = 'move() did not accept ' + position.moves[j] + ' : ';
+          error_message = `move() did not accept ${position.moves[j]} : `;
           break;
         }
       }
@@ -1121,7 +1118,7 @@ describe('PGN (ICCS Format)', () => {
       const fen = xiangqi.fen();
       expect(pgn).toBe(position.pgn);
       expect(fen).toBe(position.fen);
-      expect(error_message.length).toBe(0);
+      expect(error_message).toHaveLength(0);
     });
 
   });
@@ -1339,9 +1336,9 @@ describe('Load PGN (ICCS Format)', () => {
 
   const newline_chars = ['\n', '<br />', '\r\n', 'BLAH'];
 
-  tests.forEach(function(t, i) {
-    newline_chars.forEach(function(newline, j) {
-      test(i + String.fromCharCode(97 + j), () => {
+  tests.forEach((t, i) => {
+    newline_chars.forEach((newline, j) => {
+      test(`${i}${String.fromCharCode(97 + j)}`, () => {
         const sloppy = t.sloppy || false;
         const result = xiangqi.load_pgn(t.pgn.join(newline), {
           sloppy: sloppy,
@@ -1486,18 +1483,18 @@ describe('Make Move', () => {
     //  next: 'r2qkb1r/ppp1nppp/2n5/1B2pQ2/4P3/8/PPP2PPP/RNB1K2R r KQkq - 4 8'}
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
     const xiangqi = new Xiangqi();
     xiangqi.load(position.fen);
-    test(position.fen + ' (' + position.move + ' ' + position.legal + ')', () => {
+    test(`${position.fen} (${position.move} ${position.legal})`, () => {
       const sloppy = position.sloppy || false;
       const result = xiangqi.move(position.move, { sloppy: sloppy });
       if (position.legal) {
         expect(result &&
           xiangqi.fen() === position.next &&
-          result.captured === position.captured).toBe(true);
+          result.captured === position.captured).toBeTruthy();
       } else {
-        expect(!result).toBe(true);
+        expect(result).toBeNull();
       }
     });
 
@@ -1635,9 +1632,9 @@ describe('Validate FEN', () => {
     {fen: '3r1r2/3P2pk/1p1R3p/1Bp2p2/6q1/4Q3/PP3P1P/7K r - - 4 30', error_number: 0},*/
   ];
 
-  positions.forEach(function(position) {
+  positions.forEach(position => {
 
-    test(position.fen + ' (valid: ' + (position.error_number === 0) + ')', () => {
+    test(`${position.fen} (valid: ${(position.error_number === 0)})`, () => {
       const result = xiangqi.validate_fen(position.fen);
       expect(result.error_number).toBe(position.error_number);
     });
@@ -1749,10 +1746,10 @@ describe('History', () => {
     }
   ];
 
-  tests.forEach(function(t, i) {
+  tests.forEach((t, i) => {
     let j;
 
-    test(i.toString(), () => {
+    test(`History: ${i}`, () => {
       xiangqi.reset();
 
       for (j = 0; j < t.moves.length; j++) {
@@ -1761,7 +1758,7 @@ describe('History', () => {
 
       const history = xiangqi.history({ verbose: t.verbose });
       expect(t.fen).toBe(xiangqi.fen());
-      expect(history.length).toBe(t.moves.length);
+      expect(history).toHaveLength(t.moves.length);
 
       for (j = 0; j < t.moves.length; j++) {
         if (!t.verbose) {
@@ -1840,7 +1837,7 @@ describe('Board Tests', () => {
 
 
   tests.forEach(t => {
-    test('Board - ' + t.fen, () => {
+    test(`Board - ${t.fen}`, () => {
       const xiangqi = new Xiangqi(t.fen);
       expect(JSON.stringify(xiangqi.board())).toBe(JSON.stringify(t.board));
     });
@@ -1879,7 +1876,7 @@ describe('Regression Tests', () => {
        expect(xiangqi.fen() === 'r4r1k/1p4b1/3p3p/2q3p1/1RP5/6P1/3NP3/2Q2RKB r KQkq - 1 2');
   });
 
-  test('Github Issue #98 (white) - Wrong movement number after setting a position via FEN', function () {
+  test('Github Issue #98 (white) - Wrong movement number after setting a position via FEN', () => {
     var xiangqi = new Xiangqi();
     xiangqi.load('4r3/8/2p2PPk/1p6/pP2p1R1/P1B5/2P2K2/3r4 r - - 1 45');
     xiangqi.move('f7');
@@ -1887,7 +1884,7 @@ describe('Regression Tests', () => {
     expect(result.match(/(45\. f7)$/)).toBe(true);
   });
 
-  test('Github Issue #98 (black) - Wrong movement number after setting a position via FEN', function () {
+  test('Github Issue #98 (black) - Wrong movement number after setting a position via FEN', () => {
     var xiangqi = new Xiangqi();
     xiangqi.load('4r3/8/2p2PPk/1p6/pP2p1R1/P1B5/2P2K2/3r4 b - - 1 45');
     xiangqi.move('Rf1+');
@@ -1895,7 +1892,7 @@ describe('Regression Tests', () => {
     expect(result.match(/(45\. \.\.\. Rf1\+)$/)).toBe(true);
   });
 
-  test('Github Issue #129 load_pgn() should not clear headers if PGN contains SetUp and FEN tags', function () {
+  test('Github Issue #129 load_pgn() should not clear headers if PGN contains SetUp and FEN tags', () => {
     var pgn = [
       '[Event "Test Olympiad"]',
       '[Site "Earth"]',
@@ -1923,10 +1920,10 @@ describe('Regression Tests', () => {
       FEN: 'rnbqkb1r/1p3ppp/p2ppn2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R r KQkq - 0 1',
       SetUp: '1'
     };
-    assert.deepEqual(xiangqi.header(), expected);
+    expect(xiangqi.header()).toEqual(expected);
   });
 
-  test('Github Issue #129 clear() should clear the board and delete all headers with the exception of SetUp and FEN', function () {
+  test('Github Issue #129 clear() should clear the board and delete all headers with the exception of SetUp and FEN', () => {
     var pgn = [
       '[Event "Test Olympiad"]',
       '[Site "Earth"]',
@@ -1948,7 +1945,7 @@ describe('Regression Tests', () => {
       FEN: '8/8/8/8/8/8/8/8 r - - 0 1',
       SetUp: '1'
     };
-    assert.deepEqual(xiangqi.header(), expected);
+    expect(xiangqi.header()).toEqual(expected);
   })
 });
 */
