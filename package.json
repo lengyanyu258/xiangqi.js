@@ -28,7 +28,7 @@
     "terser": "^4.6.10"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "minify": "terser xiangqi.js -c -m --comments -o xiangqi.min.js"
   }
 }
