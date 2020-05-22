@@ -24,7 +24,7 @@
     }
   ],
   "devDependencies": {
-    "jest": "^25.3.0",
+    "jest": "26.0.1",
     "terser": "^4.6.10"
   },
   "scripts": {
