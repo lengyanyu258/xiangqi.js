@@ -730,7 +730,7 @@ const Xiangqi = function(fen) {
     turn = swap_color(turn);
   }
 
-  function set_move(old) {
+  function set_move(old, undo = true) {
     if (old == null) {
       return null;
     }
@@ -741,14 +741,12 @@ const Xiangqi = function(fen) {
     half_moves = old.half_moves;
     move_number = old.move_number;
 
-    const them = swap_color(turn);
-
     board[move.from] = board[move.to];
-    board[move.from].type = move.piece; // to undo any s
+    board[move.from].type = move.piece;
     board[move.to] = null;
 
-    if ((move.flags & BITS.CAPTURE) > 0) {
-      board[move.to] = { type: move.captured, color: them };
+    if ((move.flags & BITS.CAPTURE) > 0 && undo) {
+      board[move.to] = { type: move.captured, color: swap_color(turn) };
     }
 
     return move;
@@ -759,7 +757,7 @@ const Xiangqi = function(fen) {
   }
 
   function redo_move() {
-    return set_move(futures.pop());
+    return set_move(futures.pop(), false);
   }
 
   /* this function is used to uniquely identify ambiguous moves */
