@@ -47,7 +47,7 @@ describe('Single Square Move Generation', () => {
     {
       fen: '2ba1k3/2R1a4/b8/9/9/9/9/9/9/4K4 r - - 0 1',
       square: 'd9', verbose: false, moves: []
-    },  // pinned piece
+    },  // TODO: pinned piece
     // {fen: '8/k7/8/8/8/8/7p/K7 b - - 0 1',
     //   square: 'h2', verbose: false, moves: ['h1=Q+', 'h1=R+', 'h1=B', 'h1=N']},  //
     // {fen: 'r1bq1rk1/1pp2ppp/p1np1n2/2b1p3/2B1P3/2NP1N2/PPPBQPPP/R3K2R r KQ - 0 8',
@@ -65,7 +65,7 @@ describe('Single Square Move Generation', () => {
         [{ color: 'b', from: 'c3', to: 'c2', flags: 'n', piece: 'p', iccs: 'c3c2' },
           { color: 'b', from: 'c3', to: 'b3', flags: 'n', piece: 'p', iccs: 'c3b3' },
           { color: 'b', from: 'c3', to: 'd3', flags: 'n', piece: 'p', iccs: 'c3d3' }]
-    } // verbose
+    } // TODO: verbose
     // {fen: 'rnbqk2r/ppp1pp1p/5n1b/3p2pQ/1P2P3/B1N5/P1PP1PPP/R3KBNR b KQkq - 3 5',
     //   square: 'f1', verbose: true, moves: []},  // issue #30
   ];
@@ -282,63 +282,63 @@ describe('Get/Put/Remove', () => {
 
   const xiangqi = new Xiangqi();
   let passed = true;
-  // noinspection JSDuplicatedDeclaration,JSAnnotator
+
   const positions = [
     {
-      pieces: {
-        a9: { type: xiangqi.PAWN, color: xiangqi.RED },
-        b0: { type: xiangqi.PAWN, color: xiangqi.BLACK },
-        c8: { type: xiangqi.KNIGHT, color: xiangqi.RED },
-        d7: { type: xiangqi.KNIGHT, color: xiangqi.BLACK },
-        e6: { type: xiangqi.ROOK, color: xiangqi.RED },
-        f5: { type: xiangqi.ROOK, color: xiangqi.BLACK },
-        g4: { type: xiangqi.BISHOP, color: xiangqi.RED },
-        g5: { type: xiangqi.BISHOP, color: xiangqi.BLACK },
-        d2: { type: xiangqi.ADVISER, color: xiangqi.RED },
-        f7: { type: xiangqi.ADVISER, color: xiangqi.BLACK },
-        e0: { type: xiangqi.KING, color: xiangqi.RED },
-        e7: { type: xiangqi.KING, color: xiangqi.BLACK }
-      },
+      pieces: new Map([
+        ['a9', { type: xiangqi.PAWN, color: xiangqi.RED }],
+        ['b0', { type: xiangqi.PAWN, color: xiangqi.BLACK }],
+        ['c8', { type: xiangqi.KNIGHT, color: xiangqi.RED }],
+        ['d7', { type: xiangqi.KNIGHT, color: xiangqi.BLACK }],
+        ['e6', { type: xiangqi.ROOK, color: xiangqi.RED }],
+        ['f5', { type: xiangqi.ROOK, color: xiangqi.BLACK }],
+        ['g4', { type: xiangqi.BISHOP, color: xiangqi.RED }],
+        ['g5', { type: xiangqi.BISHOP, color: xiangqi.BLACK }],
+        ['d2', { type: xiangqi.ADVISER, color: xiangqi.RED }],
+        ['f7', { type: xiangqi.ADVISER, color: xiangqi.BLACK }],
+        ['e0', { type: xiangqi.KING, color: xiangqi.RED }],
+        ['e7', { type: xiangqi.KING, color: xiangqi.BLACK }]
+      ]),
       should_pass: true
     },
 
     {
-      pieces: { a7: { type: 'z', color: xiangqi.RDE } }, // bad piece
+      pieces: new Map([['a7', { type: 'z', color: xiangqi.RDE }]]), // bad piece
       should_pass: false
     },
 
     {
-      pieces: { j4: { type: xiangqi.PAWN, color: xiangqi.RDE } }, // bad square
+      pieces: new Map([['j4', { type: xiangqi.PAWN, color: xiangqi.RDE }]]), // bad square
       should_pass: false
     },
 
     /* disallow two kings (black) */
     {
-      pieces: {
-        d7: { type: xiangqi.KING, color: xiangqi.BLACK },
-        f2: { type: xiangqi.KING, color: xiangqi.RED },
-        e8: { type: xiangqi.KING, color: xiangqi.BLACK }
-      },
+      pieces: new Map([
+        ['d7', { type: xiangqi.KING, color: xiangqi.BLACK }],
+        ['f2', { type: xiangqi.KING, color: xiangqi.RED }],
+        ['e8', { type: xiangqi.KING, color: xiangqi.BLACK }]
+      ]),
       should_pass: false
     },
 
     /* disallow two kings (white) */
     {
-      pieces: {
-        d7: { type: xiangqi.KING, color: xiangqi.BLACK },
-        f2: { type: xiangqi.KING, color: xiangqi.RED },
-        e1: { type: xiangqi.KING, color: xiangqi.RED }
-      },
+      pieces: new Map([
+        ['d7', { type: xiangqi.KING, color: xiangqi.BLACK }],
+        ['f2', { type: xiangqi.KING, color: xiangqi.RED }],
+        ['e1', { type: xiangqi.KING, color: xiangqi.RED }]
+      ]),
       should_pass: false
     },
 
     /* allow two kings if overwriting the exact same square */
     {
-      pieces: {
-        d7: { type: xiangqi.KING, color: xiangqi.BLACK },
-        f2: { type: xiangqi.KING, color: xiangqi.RED },
-        f2: { type: xiangqi.KING, color: xiangqi.RED }
-      },
+      pieces: new Map([
+        ['d7', { type: xiangqi.KING, color: xiangqi.BLACK }],
+        [['f2'], { type: xiangqi.KING, color: xiangqi.RED }],
+        [['f2'], { type: xiangqi.KING, color: xiangqi.RED }]
+      ]),
       should_pass: true
     }
   ];
@@ -352,17 +352,21 @@ describe('Get/Put/Remove', () => {
       let square, j, piece;
 
       /* places the pieces */
-      for (square in position.pieces) {
-        passed = xiangqi.put(position.pieces[square], square);
+      for (let [square, piece] of position.pieces) {
+        if (typeof square === 'object') square = square[0];
+        passed = xiangqi.put(piece, square);
         if (!passed) break;
       }
 
-      /* iterate over every square to make sure get returns the proper
-       * piece values/color
-       */
+      let pieces = Object.create(null);
+      for (let [k, v] of position.pieces) {
+        pieces[k] = v;
+      }
+
+      /* iterate over every square to make sure get returns the proper piece values/color */
       for (j = 0; j < xiangqi.SQUARES.length; j++) {
         square = xiangqi.SQUARES[j];
-        if (!(square in position.pieces)) {
+        if (!(square in pieces)) {
           if (xiangqi.get(square)) {
             passed = false;
             break;
@@ -370,8 +374,9 @@ describe('Get/Put/Remove', () => {
         } else {
           piece = xiangqi.get(square);
           if (!(piece &&
-            piece.type === position.pieces[square].type &&
-            piece.color === position.pieces[square].color)) {
+            piece.type === pieces[square].type &&
+            piece.color === pieces[square].color
+          )) {
             passed = false;
             break;
           }
@@ -383,14 +388,15 @@ describe('Get/Put/Remove', () => {
         for (j = 0; j < xiangqi.SQUARES.length; j++) {
           square = xiangqi.SQUARES[j];
           piece = xiangqi.remove(square);
-          if ((!(square in position.pieces)) && piece) {
+          if ((!(square in pieces)) && piece) {
             passed = false;
             break;
           }
 
-          if (piece &&
-            (position.pieces[square].type !== piece.type ||
-              position.pieces[square].color !== piece.color)) {
+          if (piece && (
+            pieces[square].type !== piece.type ||
+            pieces[square].color !== piece.color
+          )) {
             passed = false;
             break;
           }
@@ -400,9 +406,7 @@ describe('Get/Put/Remove', () => {
       /* finally, check for an empty board */
       passed = passed && (xiangqi.fen() === '9/9/9/9/9/9/9/9/9/9 r - - 0 1');
 
-      /* some tests should fail, so make sure we're supposed to pass/fail each
-       * test
-       */
+      /* some tests should fail, so make sure we're supposed to pass/fail each test */
       expect(passed).toBe(position.should_pass);
     });
 
@@ -1457,7 +1461,7 @@ describe('Make Move', () => {
       move: 'h0f1'
     }
 
-    //  // strict move parser
+    // TODO: // strict move parser
     // {fen: 'r2qkbnr/ppp2ppp/2n5/1B2pQ2/4P3/8/PPP2PPP/RNB1K2R b KQkq - 3 7',
     //  legal: true,
     //  next: 'r2qkb1r/ppp1nppp/2n5/1B2pQ2/4P3/8/PPP2PPP/RNB1K2R r KQkq - 4 8',
@@ -1522,7 +1526,7 @@ describe('Validate FEN', () => {
     { fen: 'rnbakabnr/17/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 8 },
     { fen: 'rnbaka?nr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 9 },
     { fen: 'rnbakabnr/8/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 },
-    { fen: 'rnbakabnr/9/1c5c1/p1p1p1p1pp/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 }/*
+    { fen: 'rnbakabnr/9/1c5c1/p1p1p1p1pp/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 }/* TODO:
     {fen: 'r1bqkbnr/2pppppp/n7/1p6/8/4P3/PPPP1PPP/RNBQK1NR b KQkq b6 0 4', error_number: 11},
     {fen: 'rnbqkbnr/1p1ppppp/B1p5/8/6P1/4P3/PPPP1P1P/RNBQK1NR r KQkq g3 0 3', error_number: 11},
     {fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR r KQkq - 0 1',  error_number: 0},
@@ -1772,6 +1776,7 @@ describe('History', () => {
     });
 
   });
+
 });
 
 
