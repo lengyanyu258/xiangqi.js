@@ -1296,12 +1296,16 @@ const Xiangqi = function(fen) {
           ')|.)*\\])' +
           '(?:' +
           mask(newline_char) +
-          '){2}'
+          '){1,2}'
       );
 
+      // TODO: fix regex timeout problem.
+      // console.log(mask(newline_char))
+      // console.log(header_regex)
+      // console.log(pgn)
       // If no header given, begin with moves.
       const header_string = header_regex.test(pgn) ? header_regex.exec(pgn)[1] : '';
-
+      // console.log(header_string)
       // Put the board in the starting position
       reset();
 
@@ -1327,7 +1331,7 @@ const Xiangqi = function(fen) {
 
       /* delete comments */
       ms = ms.replace(/({[^}]+})+?/g, '');
-
+      // console.log(ms)
       /* delete recursive annotation variations */
       const rav_regex = /(\([^()]+\))+?/g;
       while (rav_regex.test(ms)) {
