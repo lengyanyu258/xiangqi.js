@@ -1,7 +1,5 @@
 # xiangqi.js
 
-[![Build Status](https://travis-ci.com/lengyanyu258/xiangqi.js.svg?branch=dev)](https://travis-ci.com/lengyanyu258/xiangqi.js)
-
 xiangqi.js is a Javascript xiangqi library that is used for xiangqi move
 generation/validation, piece placement/movement, and check/checkmate/stalemate
 detection - basically everything but the AI.
@@ -620,16 +618,9 @@ xiangqi.validate_fen('rnbaka?nr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABN
 //     error: '1st field (piece positions) is invalid [invalid piece].' }
 ```
 
-## MUSIC
-
-Musical support provided by:
-
-- [The Grateful Dead](https://www.youtube.com/watch?feature=player_detailpage&v=ANF6qanEB7s#t=2999)
-- [Umphrey's McGee](http://www.youtube.com/watch?v=jh-1fFWkSdw)
-
 ## BUGS
 
-- ~~The en passant square and castling flags aren't adjusted when using the put/remove functions (workaround: use .load() instead)~~
+- .load_pgn() sometimes not work well.
 
 ## TODO
 
