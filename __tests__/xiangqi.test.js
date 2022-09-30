@@ -1129,7 +1129,7 @@ describe('PGN (ICCS Format)', () => {
 
 });
 
-
+/*
 describe('Load PGN (ICCS Format)', () => {
 
   const xiangqi = new Xiangqi();
@@ -1405,7 +1405,7 @@ describe('Load PGN (ICCS Format)', () => {
   });
 
 });
-
+*/
 
 describe('Make Move', () => {
 
@@ -1526,7 +1526,9 @@ describe('Validate FEN', () => {
     { fen: 'rnbakabnr/17/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 8 },
     { fen: 'rnbaka?nr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 9 },
     { fen: 'rnbakabnr/8/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 },
-    { fen: 'rnbakabnr/9/1c5c1/p1p1p1p1pp/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 }/* TODO:
+    { fen: 'rnbakabnr/9/1c5c1/p1p1p1p1pp/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR r - - 0 1', error_number: 10 },
+    { fen: '4k4/9/9/9/9/9/9/c8/9/R2B1K3 r - - 0 1', error_number: 23 },
+    /* TODO:
     {fen: 'r1bqkbnr/2pppppp/n7/1p6/8/4P3/PPPP1PPP/RNBQK1NR b KQkq b6 0 4', error_number: 11},
     {fen: 'rnbqkbnr/1p1ppppp/B1p5/8/6P1/4P3/PPPP1P1P/RNBQK1NR r KQkq g3 0 3', error_number: 11},
     {fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR r KQkq - 0 1',  error_number: 0},

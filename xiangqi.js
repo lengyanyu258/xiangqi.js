@@ -1,5 +1,5 @@
 /* @license
- * Copyright (c) 2019-2020, lengyanyu258 (lengyanyu258@outlook.com)
+ * Copyright (c) 2019-2022, lengyanyu258 (lengyanyu258@outlook.com)
  * Released under the BSD-2-Clause license
  * https://github.com/lengyanyu258/xiangqi.js/blob/master/LICENSE
  */
@@ -159,13 +159,14 @@ const Xiangqi = function(fen) {
       15: '1st field (piece positions) is invalid [each side has no more than 2 rooks].',
       16: '1st field (piece positions) is invalid [each side has no more than 2 cannons].',
       17: '1st field (piece positions) is invalid [each side has no more than 5 pawns].',
-      18: '1st field (piece positions) is invalid [king should at palace].',
-      19: '1st field (piece positions) is invalid [red adviser should at right position].',
+      18: '1st field (piece positions) is invalid [black king should at right position].',
+      19: '1st field (piece positions) is invalid [red king should at right position].',
       20: '1st field (piece positions) is invalid [black adviser should at right position].',
-      21: '1st field (piece positions) is invalid [red bishop should at right position].',
+      21: '1st field (piece positions) is invalid [red adviser should at right position].',
       22: '1st field (piece positions) is invalid [black bishop should at right position].',
-      23: '1st field (piece positions) is invalid [red pawn should at right position].',
-      24: '1st field (piece positions) is invalid [black pawn should at right position].'
+      23: '1st field (piece positions) is invalid [red bishop should at right position].',
+      24: '1st field (piece positions) is invalid [black pawn should at right position].',
+      25: '1st field (piece positions) is invalid [red pawn should at right position].',
     };
 
     function result(err_num) {
@@ -219,26 +220,26 @@ const Xiangqi = function(fen) {
         'a': {number: 0, squares: []}, 'A': {number: 0, squares: []},
         'k': {number: 0, squares: []}, 'K': {number: 0, squares: []}
       };
-    let i, sum_fields, previous_was_number;
+    let i, j, sum_fields, previous_was_number;
     for (i = 0; i < rows.length; i++) {
       /* check for right sum of fields AND not two numbers in succession */
       sum_fields = 0;
       previous_was_number = false;
 
-      for (let k = 0; k < rows[i].length; k++) {
-        if (!isNaN(rows[i][k])) {
+      for (j = 0; j < rows[i].length; j++) {
+        if (!isNaN(rows[i][j])) {
           if (previous_was_number) {
             return result(8);
           }
-          sum_fields += parseInt(rows[i][k], 10);
+          sum_fields += parseInt(rows[i][j], 10);
           previous_was_number = true;
         } else {
           try {
-            ++pieces[rows[i][k]].number;
+            ++pieces[rows[i][j]].number;
           } catch (e) {
             return result(9);
           }
-          pieces[rows[i][k]].squares.push((9 - i) << 4 | sum_fields);
+          pieces[rows[i][j]].squares.push(i << 4 | sum_fields);
           sum_fields += 1;
           previous_was_number = false;
         }
@@ -272,38 +273,40 @@ const Xiangqi = function(fen) {
     }
 
     /* 10th criterion: every piece's place is valid? */
-    if (out_of_place(KING, pieces.k.squares[0], RED) ||
-        out_of_place(KING, pieces.K.squares[0], BLACK)) {
+    if (out_of_place(KING, pieces.k.squares[0], BLACK)) {
       return result(18);
     }
-    for (i = 0; i < pieces.a.squares.length; ++i) {
-      if (out_of_place(ADVISER, pieces.a.squares[i], RED)) {
-        return result(19);
-      }
+    if (out_of_place(KING, pieces.K.squares[0], RED)) {
+      return result(19);
     }
-    for (i = 0; i < pieces.A.squares.length; ++i) {
-      if (out_of_place(ADVISER, pieces.A.squares[i], BLACK)) {
+    for (i = 0; i < pieces.a.squares.length; ++i) {
+      if (out_of_place(ADVISER, pieces.a.squares[i], BLACK)) {
         return result(20);
       }
     }
-    for (i = 0; i < pieces.b.squares.length; ++i) {
-      if (out_of_place(BISHOP, pieces.b.squares[i], RED)) {
+    for (i = 0; i < pieces.A.squares.length; ++i) {
+      if (out_of_place(ADVISER, pieces.A.squares[i], RED)) {
         return result(21);
       }
     }
-    for (i = 0; i < pieces.B.squares.length; ++i) {
-      if (out_of_place(BISHOP, pieces.B.squares[i], BLACK)) {
+    for (i = 0; i < pieces.b.squares.length; ++i) {
+      if (out_of_place(BISHOP, pieces.b.squares[i], BLACK)) {
         return result(22);
       }
     }
-    for (i = 0; i < pieces.p.squares.length; ++i) {
-      if (out_of_place(PAWN, pieces.p.squares[i], RED)) {
+    for (i = 0; i < pieces.B.squares.length; ++i) {
+      if (out_of_place(BISHOP, pieces.B.squares[i], RED)) {
         return result(23);
       }
     }
-    for (i = 0; i < pieces.P.squares.length; ++i) {
-      if (out_of_place(PAWN, pieces.P.squares[i], BLACK)) {
+    for (i = 0; i < pieces.p.squares.length; ++i) {
+      if (out_of_place(PAWN, pieces.p.squares[i], BLACK)) {
         return result(24);
+      }
+    }
+    for (i = 0; i < pieces.P.squares.length; ++i) {
+      if (out_of_place(PAWN, pieces.P.squares[i], RED)) {
+        return result(25);
       }
     }
 
