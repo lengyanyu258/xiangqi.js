@@ -629,3 +629,9 @@ xiangqi.validate_fen('rnbaka?nr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABN
   generate_moves() and attacked()).
 - Refactor API to use camelCase - yuck.
 - Add more robust FEN validation.
+
+## Docs
+
+- [计算机博弈 - 象棋百科全书. Xqbase. ](https://www.xqbase.com/computer.htm)
+- [规则与协议 - 象棋百科全书. Xqbase. ](https://www.xqbase.com/protocol.htm)
+- Based on [jhlywa/chess.js. Github. ](https://github.com/jhlywa/chess.js).
