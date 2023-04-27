@@ -1,5 +1,5 @@
 /* @license
- * Copyright (c) 2019-2022, lengyanyu258 (lengyanyu258@outlook.com)
+ * Copyright (c) 2019-2023, lengyanyu258 (lengyanyu258@outlook.com)
  * Released under the BSD-2-Clause license
  * https://github.com/lengyanyu258/xiangqi.js/blob/master/LICENSE
  */
@@ -1290,25 +1290,21 @@ const Xiangqi = function(fen) {
         typeof options === 'object' && typeof options.newline_char === 'string' ?
           options.newline_char : '\r?\n';
 
-      // RegExp to split header. Takes advantage of the fact that header and movetext
-      // will always have a blank line between them (ie, two newline_char's).
-      // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n){2}/
+      // RegExp to split header.
+      // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n)*/
       const header_regex = new RegExp(
         '^(\\[((?:' +
           mask(newline_char) +
           ')|.)*\\])' +
           '(?:' +
           mask(newline_char) +
-          '){1,2}'
+          ')*'
       );
 
-      // TODO: fix regex timeout problem.
-      // console.log(mask(newline_char))
-      // console.log(header_regex)
-      // console.log(pgn)
+      // To fix regex timeout problem for too long chinese string when newline_char is `<br />`.
+      const sub_pgn = pgn.slice(0, pgn.lastIndexOf(']') + 1);
       // If no header given, begin with moves.
-      const header_string = header_regex.test(pgn) ? header_regex.exec(pgn)[1] : '';
-      // console.log(header_string)
+      const header_string = header_regex.test(sub_pgn) ? header_regex.exec(sub_pgn)[1] : '';
       // Put the board in the starting position
       reset();
 
@@ -1334,7 +1330,6 @@ const Xiangqi = function(fen) {
 
       /* delete comments */
       ms = ms.replace(/({[^}]+})+?/g, '');
-      // console.log(ms)
       /* delete recursive annotation variations */
       const rav_regex = /(\([^()]+\))+?/g;
       while (rav_regex.test(ms)) {

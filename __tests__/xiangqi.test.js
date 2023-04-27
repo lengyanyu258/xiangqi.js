@@ -1129,7 +1129,7 @@ describe('PGN (ICCS Format)', () => {
 
 });
 
-/*
+
 describe('Load PGN (ICCS Format)', () => {
 
   const xiangqi = new Xiangqi();
@@ -1405,7 +1405,7 @@ describe('Load PGN (ICCS Format)', () => {
   });
 
 });
-*/
+
 
 describe('Make Move', () => {
 
