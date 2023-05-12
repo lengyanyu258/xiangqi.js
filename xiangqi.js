@@ -1291,20 +1291,13 @@ const Xiangqi = function(fen) {
           options.newline_char : '\r?\n';
 
       // RegExp to split header.
-      // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n)*/
+      // With default newline_char, will equal: /^(?:\s)*(((?:\r?\n)*\[[^\]]+\])+)/
       const header_regex = new RegExp(
-        '^(\\[((?:' +
-          mask(newline_char) +
-          ')|.)*\\])' +
-          '(?:' +
-          mask(newline_char) +
-          ')*'
+        '^(?:\\s)*(((?:' + mask(newline_char) + ')*\\[[^\\]]+\\])+)'
       );
 
-      // To fix regex timeout problem for too long chinese string when newline_char is `<br />`.
-      const sub_pgn = pgn.slice(0, pgn.lastIndexOf(']') + 1);
       // If no header given, begin with moves.
-      const header_string = header_regex.test(sub_pgn) ? header_regex.exec(sub_pgn)[1] : '';
+      const header_string = header_regex.test(pgn) ? header_regex.exec(pgn)[1] : '';
       // Put the board in the starting position
       reset();
 
