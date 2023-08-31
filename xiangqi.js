@@ -965,6 +965,7 @@ const Xiangqi = function(fen) {
     move.iccs = move_to_iccs(move, false);
     move.to = algebraic(move.to);
     move.from = algebraic(move.from);
+    move.piece = turn === RED ? move.piece.toUpperCase() : move.piece;
 
     let flags = '';
 
